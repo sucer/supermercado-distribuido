@@ -67,7 +67,7 @@ public class OficinaCentral extends UnicastRemoteObject implements IntrOficinaCe
             if (saldo >= cantidad) {
                 iterBodega.despachar(producto, cantidad, supermercado);
                 despachado = true;
-                System.out.println("Despachado Producto " + producto.getDescripcion() + " cantidad " + cantidad + " a supermercado " + supermercado.hashCode());
+                System.out.println("Despachado Producto " + producto.getDescripcion() + " cantidad " + cantidad + " a supermercado " + supermercado.hashCode() +" de la bodega "+iterBodega.hashCode());
                 break;
             }
             //consulta la cantidad del producto en la bodega
