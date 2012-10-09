@@ -59,5 +59,4 @@ public class MonitorInventario implements Runnable{
     public void setPrendido(boolean prendido) {
         this.prendido = prendido;
     }
-
 }
