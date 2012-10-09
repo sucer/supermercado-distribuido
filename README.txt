@@ -1,11 +1,11 @@
-PROYECTO DE SISTEMA DISTRIBUIDO CADENA DE SUPERMERCADOS
+ï»¿PROYECTO DE SISTEMA DISTRIBUIDO CADENA DE SUPERMERCADOS
 Curso de sistemas distribuidos
 Maestria en Ingenieria de Sistemas
-Universidad Tecnológica de Pereira
+Universidad TecnolÃ³gica de Pereira
 
-John Bayron Vásquez Castrillón
-Ruben Dario Marín
-Andrés Sucerquia Osorio
+John Bayron VÃ¡squez CastrillÃ³n
+Ruben Dario MarÃ­n
+AndrÃ©s Sucerquia Osorio
 
 
 Para correr el programa
