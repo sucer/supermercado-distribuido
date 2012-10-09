@@ -197,10 +197,10 @@ public class Supermercado extends UnicastRemoteObject implements IntrSupermercad
         frmSupermercado.setMensajeAsignador(mensaje);
     }
 
-    public synchronized void solicitud(Producto producto, int cantidad) throws RemoteException {
+    public void solicitud(Producto producto, int cantidad) throws RemoteException {
         frmSupermercado.setMensajeMonitorInventario("Pidiendo "+cantidad+" unds de "+producto); 
         try {
-            //System.out.println("Realizando pedido de " + cantidad + " unidades de " + producto.getDescripcion()+" en el supermercado "+this.hashCode());
+            System.out.println("Realizando pedido de " + cantidad + " unidades de " + producto.getDescripcion()+" en el supermercado "+this.hashCode());
             IntrOficinaCentral oficinaCentral = (IntrOficinaCentral) Naming.lookup(registryURL);
             //registrando supermercado
             oficinaCentral.solicitud(producto, cantidad, this);
@@ -228,14 +228,14 @@ public class Supermercado extends UnicastRemoteObject implements IntrSupermercad
         caja.getPnlCaja().setColorCaja(FrmSupermercado.ROJO);
     }
 
-    public synchronized void cambiarPrecio(Producto producto, long nuevoPrecio) {
+    public void cambiarPrecio(Producto producto, long nuevoPrecio) {
         ItemInventario itemInventario=buscarItemInventario(producto);
         if (itemInventario!=null){
             itemInventario.setPrecioVenta(nuevoPrecio);
         }
     }
 
-    public synchronized  int saldo(Producto producto) throws RemoteException {
+    public int saldo(Producto producto) throws RemoteException {
         ItemInventario itemInventario=buscarItemInventario(producto);
         if (itemInventario!=null){
             return itemInventario.getCantidad();

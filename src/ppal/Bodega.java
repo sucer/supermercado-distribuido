@@ -57,12 +57,12 @@ public class Bodega extends UnicastRemoteObject implements IntrBodega{
         
     }
     
-    public synchronized void recibirCatalogo(List<Producto> catalogoProducto) throws RemoteException {
+    public void recibirCatalogo(List<Producto> catalogoProducto) throws RemoteException {
         System.out.println("Recibiendo Catalogo de productos...");
         catalogoProductos=catalogoProducto;
     }
 
-    public synchronized int saldo(Producto producto) throws RemoteException {
+    public int saldo(Producto producto) throws RemoteException {
         ItemInventario itemInventario=buscarItemInventario(producto);
         if (itemInventario!=null){
             return itemInventario.getCantidad();
@@ -70,7 +70,7 @@ public class Bodega extends UnicastRemoteObject implements IntrBodega{
         return 0;
     }
     
-    public synchronized void despachar(Producto producto, int cantidad, IntrSupermercado supermercado) throws RemoteException {
+    public void despachar(Producto producto, int cantidad, IntrSupermercado supermercado) throws RemoteException {
         if (cantidad > 0) {
             System.out.println("Despachando producto " + producto.getDescripcion() + " cantidad " + cantidad + "de la bodega " + this.hashCode() + " al supermercado " + supermercado.hashCode());
             ingresarDescargar(producto, cantidad * -1);
@@ -80,7 +80,7 @@ public class Bodega extends UnicastRemoteObject implements IntrBodega{
         }
     }
     
-     public synchronized boolean ingresarDescargar(Producto producto, int cantidad) {
+     public boolean ingresarDescargar(Producto producto, int cantidad) {
         ItemInventario itemInventario=buscarItemInventario(producto);
         if (itemInventario!=null){
             itemInventario.setCantidad(itemInventario.getCantidad()+cantidad);
