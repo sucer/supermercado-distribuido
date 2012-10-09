@@ -5,10 +5,24 @@
 
 package ppal;
 
+import java.rmi.Remote;
+
 /**
  *
  * @author Usuario UTP
  */
-public interface IntrOficinaCentral {
-
+public interface IntrOficinaCentral extends Remote {
+    
+    public void registrarSupermercado(IntrSupermercado intrSupermercado) throws java.rmi.RemoteException;
+    
+    public void registrarBodega(IntrBodega intrBodega) throws java.rmi.RemoteException;
+    
+    public void desconectarSupermercado(IntrSupermercado intrSupermercado) throws java.rmi.RemoteException;
+    
+    public void desconectarBodega(IntrBodega intrBodega) throws java.rmi.RemoteException;
+    
+    public void solicitud(Producto producto, int cantidad, IntrSupermercado intrSupermercado) throws java.rmi.RemoteException;
+    
+    public void cambiarPrecio(Producto producto, long precio) throws java.rmi.RemoteException;
+    
 }

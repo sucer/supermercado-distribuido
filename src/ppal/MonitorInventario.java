@@ -5,6 +5,10 @@
 
 package ppal;
 
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Usuario UTP
@@ -18,7 +22,11 @@ public class MonitorInventario implements Runnable{
             for ( ItemInventario itemInventario : supermercado.getItemsInventario()){
                 if (itemInventario.getCantidad()<itemInventario.getReOrden() && !itemInventario.isPedido() ){
                     itemInventario.setPedido(true);
-                    supermercado.solicitud(itemInventario.getProducto(), itemInventario.getReCompra());
+                    try {
+                        supermercado.solicitud(itemInventario.getProducto(), itemInventario.getReCompra());
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(MonitorInventario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }

@@ -5,20 +5,22 @@
 
 package ppal;
 
+import java.util.List;
+
 /**
  *
  * @author Usuario UTP
  */
-public interface IntrSupermercado {
+public interface IntrSupermercado extends java.rmi.Remote{
 
-    public boolean ingresarDescargar(Producto producto, int cantidad);
+    public boolean ingresarDescargar(Producto producto, int cantidad) throws java.rmi.RemoteException;
 
-    public void solicitud(Producto producto, int cantidad);
+    public void solicitud(Producto producto, int cantidad) throws java.rmi.RemoteException;
 
-    public void cambiarPrecio(Producto producto, long nuevoPrecio);
+    public void cambiarPrecio(Producto producto, long nuevoPrecio)throws java.rmi.RemoteException;
 
-    public int saldo(Producto producto);
+    public int saldo(Producto producto) throws java.rmi.RemoteException;
 
-    public boolean crearItemInventario(Producto producto,int cantidad, long precioVenta, int reOrden, int reCompra);
+    public void recibirCatalogo(List<Producto> catalogoProducto) throws java.rmi.RemoteException;
 
 }
