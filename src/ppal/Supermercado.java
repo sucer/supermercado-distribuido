@@ -141,7 +141,7 @@ public class Supermercado extends UnicastRemoteObject implements IntrSupermercad
            IntrOficinaCentral oficinaCentral=(IntrOficinaCentral)Naming.lookup(registryURL);
            //registrando supermercado
            oficinaCentral.registrarSupermercado(this);
-           System.out.println("Supermercado registrado! "+this.hashCode());
+           //System.out.println("Supermercado registrado! "+this.hashCode());
         }// end try
         catch (Exception re) {
           System.out.println("Excepcion en Supermercado: " + re);
@@ -154,7 +154,7 @@ public class Supermercado extends UnicastRemoteObject implements IntrSupermercad
            IntrOficinaCentral oficinaCentral=(IntrOficinaCentral)Naming.lookup(registryURL);
            //registrando supermercado
            oficinaCentral.desconectarSupermercado(this);
-           System.out.println("Supermercado registrado! "+this.hashCode());
+           //System.out.println("Supermercado registrado! "+this.hashCode());
         }// end try
         catch (Exception re) {
           System.out.println("Excepcion en Supermercado: " + re);
@@ -163,7 +163,7 @@ public class Supermercado extends UnicastRemoteObject implements IntrSupermercad
     }
     
     private void cargarInventario() {
-        System.out.println("Creando inventario de productos en el supermercado "+this.hashCode());
+        //System.out.println("Creando inventario de productos en el supermercado "+this.hashCode());
         int cantidadProducto=0;
         long precio=0;
         for(Producto producto : catalogoProductos){
@@ -173,7 +173,7 @@ public class Supermercado extends UnicastRemoteObject implements IntrSupermercad
             precio=(long)Math.floor(Math.random()*PRECIOMAXIMO+PRECIOMINIMO);
             //crea el item en el inventario
             crearItemInventario(producto, cantidadProducto, precio, REORDEN, RECOMPRA);
-            System.out.println("Creado producto "+producto.getDescripcion()+" cantidad: "+cantidadProducto +" precio "+precio);
+            //System.out.println("Creado producto "+producto.getDescripcion()+" cantidad: "+cantidadProducto +" precio "+precio);
         }
     }
     
