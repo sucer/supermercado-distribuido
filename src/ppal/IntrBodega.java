@@ -21,4 +21,5 @@ public interface IntrBodega extends Remote {
     
     public void despachar(Producto producto,int cantidad,IntrSupermercado supermercado) throws RemoteException;
 
+    public String getNombre() throws java.rmi.RemoteException;
 }

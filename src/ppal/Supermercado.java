@@ -31,7 +31,7 @@ public class Supermercado extends UnicastRemoteObject implements IntrSupermercad
     private FabricaMercados fabricaMercados;
     private AsignadorMercados asignadorMercados;
     private boolean prendido;
-    private String nombre;
+    private String nombre="Supermercado";
     
     private String registryURL;
     private String host;
@@ -141,6 +141,19 @@ public class Supermercado extends UnicastRemoteObject implements IntrSupermercad
            IntrOficinaCentral oficinaCentral=(IntrOficinaCentral)Naming.lookup(registryURL);
            //registrando supermercado
            oficinaCentral.registrarSupermercado(this);
+           System.out.println("Supermercado registrado! "+this.hashCode());
+        }// end try
+        catch (Exception re) {
+          System.out.println("Excepcion en Supermercado: " + re);
+          re.printStackTrace();
+        }
+    }
+    
+    public void desconectarOficinaCentral() {
+        try{
+           IntrOficinaCentral oficinaCentral=(IntrOficinaCentral)Naming.lookup(registryURL);
+           //registrando supermercado
+           oficinaCentral.desconectarSupermercado(this);
            System.out.println("Supermercado registrado! "+this.hashCode());
         }// end try
         catch (Exception re) {
@@ -378,7 +391,7 @@ public class Supermercado extends UnicastRemoteObject implements IntrSupermercad
     }
     
     public static void main(String args[]) throws RemoteException{
-        Supermercado supermercado=new Supermercado("Supermercado LA DISTRIBUIDORA - Sucursal UTP");
+        Supermercado supermercado=new Supermercado("Supermercado LA DISTRIBUIDORA - Sucursal Berlin");
     }
 
     public void recibirCatalogo(List<Producto> catalogo) throws RemoteException {

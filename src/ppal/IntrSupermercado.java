@@ -22,5 +22,7 @@ public interface IntrSupermercado extends java.rmi.Remote{
     public int saldo(Producto producto) throws java.rmi.RemoteException;
 
     public void recibirCatalogo(List<Producto> catalogoProducto) throws java.rmi.RemoteException;
+    
+    public String getNombre() throws java.rmi.RemoteException;
 
 }

@@ -4,16 +4,24 @@
  */
 package ppal;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  *
  * @author Usuario UTP
  */
 public class OficinaCentral extends UnicastRemoteObject implements IntrOficinaCentral {
+    
+    FrmOficinaCentral frmOficinaCentral;
 
     private List<Producto> catalogoProductos = new ArrayList<Producto>();
     private List<IntrSupermercado> lstSupermercados = new ArrayList<IntrSupermercado>();
@@ -23,21 +31,45 @@ public class OficinaCentral extends UnicastRemoteObject implements IntrOficinaCe
         super();
         System.out.println("Inicializando la oficina central");
         cargarProductos();
+        
+        frmOficinaCentral=new FrmOficinaCentral(catalogoProductos, lstSupermercados, lstBodegas);
+        frmOficinaCentral.setLocationRelativeTo(null);
+        
+        frmOficinaCentral.setVisible(true); 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public synchronized void registrarSupermercado(IntrSupermercado intrSupermercado) throws RemoteException {
         if (!lstSupermercados.contains(intrSupermercado)) {
-            lstSupermercados.add(intrSupermercado);
-            System.out.println("Nuevo Supermercado Conectado..");
+            lstSupermercados.add(intrSupermercado);            
+            //System.out.println("Nuevo Supermercado Conectado..");
+            frmOficinaCentral.setMensajeSupermercados(intrSupermercado.getNombre()+ " se ha conectado");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            frmOficinaCentral.refrescarSupermercados();
             enviarCatalogoSupermercado(intrSupermercado);
         }
     }
 
     public synchronized void registrarBodega(IntrBodega intrBodega) throws RemoteException {
-        System.out.println("Registrando bodega "+intrBodega.hashCode());
+        //System.out.println("Registrando bodega "+intrBodega.hashCode());
         if (!lstBodegas.contains(intrBodega)) {
             lstBodegas.add(intrBodega);
-            System.out.println("Se registro la bodega "+intrBodega.hashCode());
+            //System.out.println("Se registro la bodega "+intrBodega.hashCode());
+            frmOficinaCentral.setMensajeBodegas(intrBodega.getNombre()+ " se ha conectado");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            frmOficinaCentral.refrescarBodegas();
             enviarCatalogoBodega(intrBodega);
         }
     }
@@ -45,21 +77,32 @@ public class OficinaCentral extends UnicastRemoteObject implements IntrOficinaCe
     public void desconectarSupermercado(IntrSupermercado intrSupermercado) throws RemoteException {
         if (lstSupermercados.remove(intrSupermercado)) {
             System.out.println("Supermercado Desconectado: ");
+            frmOficinaCentral.setMensajeSupermercados(intrSupermercado.getNombre()+" se ha desconectado");
+            frmOficinaCentral.refrescarSupermercados();
         } else {
             System.out.println("El Supermercado no se pudo Desconectar: ");
         }
+        
     }
 
     public void desconectarBodega(IntrBodega intrBodega) throws RemoteException {
-        if (lstSupermercados.remove(intrBodega)) {
+        if (lstBodegas.remove(intrBodega)) {
             System.out.println("Bodega Desconectado: ");
+            frmOficinaCentral.setMensajeBodegas(intrBodega.getNombre()+" se ha desconectado");
+            frmOficinaCentral.refrescarBodegas();
         } else {
             System.out.println("La Bodega no se pudo Desconectar: ");
         }
     }
    
     public synchronized void solicitud(Producto producto, int cantidad, IntrSupermercado supermercado) throws RemoteException {
-        System.out.println("Solicitud de " + cantidad + " " + producto.getDescripcion() + " del Supermercado " + supermercado.hashCode());
+        //System.out.println("Solicitud de " + cantidad + " " + producto.getDescripcion() + " del Supermercado " + supermercado.hashCode());
+        frmOficinaCentral.setMensajeRecepcionEnvioPedidos("Solicitud de " + cantidad + " unds de " + producto + " del Supermercado " + supermercado.getNombre());
+        try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         //Busca en las bodegas si disponibilidad
         boolean despachado = false;
         for (IntrBodega iterBodega : lstBodegas) {
@@ -67,11 +110,12 @@ public class OficinaCentral extends UnicastRemoteObject implements IntrOficinaCe
             if (saldo >= cantidad) {
                 iterBodega.despachar(producto, cantidad, supermercado);
                 despachado = true;
-                System.out.println("Despachado Producto " + producto.getDescripcion() + " cantidad " + cantidad + " a supermercado " + supermercado.hashCode() +" de la bodega "+iterBodega.hashCode());
+                frmOficinaCentral.setMensajeRecepcionEnvioPedidos("Enviando pedido de " + cantidad + "unds de " + producto + " de la bodega "+iterBodega.getNombre() + " para el supermercado " + supermercado.getNombre() );
+                //System.out.println("Pedido enviado de " + cantidad + "unds de " + producto + "la bodega "+iterBodega.getNombre() + " para el supermercado " + supermercado.getNombre() );
                 break;
             }
             //consulta la cantidad del producto en la bodega
-            System.out.println("Saldo del Producto: " + producto.getDescripcion() + " es:" + saldo + " en la Bodega " + iterBodega.hashCode());
+            //System.out.println("Saldo del Producto: " + producto.getDescripcion() + " es:" + saldo + " en la Bodega " + iterBodega.hashCode());
         }
         //Busca en los otros supermercados si hay disponibilidad
         /*for (IntrSupermercado iterSupermercado : lstSupermercados) {
@@ -88,7 +132,8 @@ public class OficinaCentral extends UnicastRemoteObject implements IntrOficinaCe
             }
         }*/
         if (!despachado) {
-            System.out.println("El producto " + producto.getDescripcion() + " esta agotado en toda la cadena de supermercados debe hacerse la solicitud de compra con el proveedor ");
+            frmOficinaCentral.setMensajeRecepcionEnvioPedidos("El producto " + producto.getDescripcion() + " esta agotado en toda la cadena de supermercados debe hacerse la solicitud de compra con el proveedor ");
+            //System.out.println("El producto " + producto.getDescripcion() + " esta agotado en toda la cadena de supermercados debe hacerse la solicitud de compra con el proveedor ");
         }
     }
 
@@ -170,4 +215,41 @@ public class OficinaCentral extends UnicastRemoteObject implements IntrOficinaCe
         catalogoProductos.add(new Producto("030", "Desodorante Rexona clinical"));
         System.out.println("se crearon "+catalogoProductos.size()+" productos");
     }
+    
+    
+    public static void main(String args[]){
+        String registryURL;
+        String host;
+        int RMIPortNum;
+        try{
+           Properties props = new Properties();
+           props.load(new FileInputStream(new File("src\\ppal\\configuracion.properties")));
+           host = props.getProperty("host","localhost");
+           RMIPortNum=Integer.parseInt(props.getProperty("puerto","733"));
+           startRegistry(RMIPortNum);
+           IntrOficinaCentral exportedObj = new OficinaCentral();
+           registryURL = "rmi://" + host + ":" + RMIPortNum + "/oficinaCentral";
+           Naming.rebind(registryURL, exportedObj);
+           System.out.println("Servidor iniciado en "+host+":"+RMIPortNum +" con URL: "+registryURL);
+        }// end try
+        catch (Exception re) {
+          System.out.println("Excepcion en Servidor Oficina Central: " + re);
+          re.printStackTrace();
+        } // end catch
+    }
+    //This method starts a RMI registry on the local host, if
+    //it does not already exists at the specified port number.
+    private static void startRegistry(int RMIPortNum)
+        throws RemoteException{
+        try {
+            Registry registry =LocateRegistry.getRegistry(RMIPortNum);
+            registry.list( );
+            // This call will throw an exception
+            // if the registry does not already exist
+    }
+    catch (RemoteException e) {
+      // No valid registry at that port.
+        Registry registry =LocateRegistry.createRegistry(RMIPortNum);
+    }
+  } // end startRegistry
 }

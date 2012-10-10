@@ -32,6 +32,8 @@ public class FrmSupermercado extends javax.swing.JFrame {
     public static final Color BASEAPP = new Color(102,102,102);
     public static final Color COMPONENTES=new Color(255, 255 , 255);
     
+    //DlgPedirNombre dlgPedirNombre=new DlgPedirNombre(this, true, "Digite el nombre del supermercado");
+    
     
     /** Creates new form FrmSupermercado */
     public FrmSupermercado(Supermercado supermercado, List<ItemInventario> itemsInventario ) {
@@ -57,7 +59,19 @@ public class FrmSupermercado extends javax.swing.JFrame {
         tblInventario.getColumnModel().getColumn(5).setMaxWidth(45);                  
         tblInventario.revalidate();
         tblInventario.repaint();
+        
+        
     }
+    
+    
+    /*@Override
+    public void setVisible(boolean ban){
+        super.setVisible(ban);
+        dlgPedirNombre.setLocationRelativeTo(null);
+        supermercado.setNombre(dlgPedirNombre.getNombre());
+        this.setTitle(supermercado.getNombre());
+        
+    }*/
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -124,6 +138,11 @@ public class FrmSupermercado extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(supermercado.getNombre());
         setBackground(new java.awt.Color(0, 0, 51));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         pnlSupermercado.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -137,7 +156,7 @@ public class FrmSupermercado extends javax.swing.JFrame {
 
         txtMensajeAsignadorMercados.setBackground(FrmSupermercado.COMPONENTES);
         txtMensajeAsignadorMercados.setEditable(false);
-        txtMensajeAsignadorMercados.setFont(new java.awt.Font("Tahoma", 1, 12));
+        txtMensajeAsignadorMercados.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         javax.swing.GroupLayout pnlAsignadorMercadosLayout = new javax.swing.GroupLayout(pnlAsignadorMercados);
         pnlAsignadorMercados.setLayout(pnlAsignadorMercadosLayout);
@@ -161,7 +180,7 @@ public class FrmSupermercado extends javax.swing.JFrame {
 
         txtMensajeMonitorCajas.setBackground(FrmSupermercado.COMPONENTES);
         txtMensajeMonitorCajas.setEditable(false);
-        txtMensajeMonitorCajas.setFont(new java.awt.Font("Tahoma", 1, 12));
+        txtMensajeMonitorCajas.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         javax.swing.GroupLayout pnlMonitorCajasLayout = new javax.swing.GroupLayout(pnlMonitorCajas);
         pnlMonitorCajas.setLayout(pnlMonitorCajasLayout);
@@ -169,7 +188,7 @@ public class FrmSupermercado extends javax.swing.JFrame {
             pnlMonitorCajasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMonitorCajasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtMensajeMonitorCajas, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+                .addComponent(txtMensajeMonitorCajas)
                 .addContainerGap())
         );
         pnlMonitorCajasLayout.setVerticalGroup(
@@ -185,7 +204,7 @@ public class FrmSupermercado extends javax.swing.JFrame {
 
         txtMensajeMonitorInventario.setBackground(FrmSupermercado.COMPONENTES);
         txtMensajeMonitorInventario.setEditable(false);
-        txtMensajeMonitorInventario.setFont(new java.awt.Font("Tahoma", 1, 12));
+        txtMensajeMonitorInventario.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         javax.swing.GroupLayout PnlMonitorInventarioLayout = new javax.swing.GroupLayout(PnlMonitorInventario);
         PnlMonitorInventario.setLayout(PnlMonitorInventarioLayout);
@@ -193,7 +212,7 @@ public class FrmSupermercado extends javax.swing.JFrame {
             PnlMonitorInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PnlMonitorInventarioLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txtMensajeMonitorInventario, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+                .addComponent(txtMensajeMonitorInventario)
                 .addContainerGap())
         );
         PnlMonitorInventarioLayout.setVerticalGroup(
@@ -210,7 +229,7 @@ public class FrmSupermercado extends javax.swing.JFrame {
         tbItemsMercado.setBackground(FrmSupermercado.COMPONENTES);
         scrItemsMercado.setViewportView(tbItemsMercado);
 
-        lblCantidadProductos.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblCantidadProductos.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblCantidadProductos.setForeground(new java.awt.Color(255, 255, 255));
         lblCantidadProductos.setText("Cant. productos tentativos");
 
@@ -228,19 +247,19 @@ public class FrmSupermercado extends javax.swing.JFrame {
 
         txtMensajeFabrica.setBackground(FrmSupermercado.COMPONENTES);
         txtMensajeFabrica.setEditable(false);
-        txtMensajeFabrica.setFont(new java.awt.Font("Tahoma", 1, 12));
+        txtMensajeFabrica.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         txtMensajeMercado.setBackground(FrmSupermercado.COMPONENTES);
         txtMensajeMercado.setEditable(false);
-        txtMensajeMercado.setFont(new java.awt.Font("Tahoma", 1, 11));
+        txtMensajeMercado.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
-        lblMercado.setFont(new java.awt.Font("Tahoma", 1, 11));
+        lblMercado.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblMercado.setForeground(new java.awt.Color(255, 255, 255));
         lblMercado.setText("Mercado");
 
         txtMercado.setBackground(FrmSupermercado.COMPONENTES);
         txtMercado.setEditable(false);
-        txtMercado.setFont(new java.awt.Font("Tahoma", 1, 11));
+        txtMercado.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
         javax.swing.GroupLayout pnlFabricaMercadosLayout = new javax.swing.GroupLayout(pnlFabricaMercados);
         pnlFabricaMercados.setLayout(pnlFabricaMercadosLayout);
@@ -283,7 +302,7 @@ public class FrmSupermercado extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtMensajeMercado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrItemsMercado, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                .addComponent(scrItemsMercado, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -310,7 +329,7 @@ public class FrmSupermercado extends javax.swing.JFrame {
 
         txtMensajeInventario.setBackground(FrmSupermercado.COMPONENTES);
         txtMensajeInventario.setEditable(false);
-        txtMensajeInventario.setFont(new java.awt.Font("Tahoma", 1, 12));
+        txtMensajeInventario.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         tblInventario.setBackground(FrmSupermercado.COMPONENTES);
         tblInventario.setModel(new javax.swing.table.DefaultTableModel(
@@ -339,7 +358,7 @@ public class FrmSupermercado extends javax.swing.JFrame {
             .addGroup(pnlInventarioLayout.createSequentialGroup()
                 .addComponent(txtMensajeInventario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrInventario, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                .addComponent(scrInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -406,6 +425,11 @@ public class FrmSupermercado extends javax.swing.JFrame {
         }        
         supermercado.activarInactivarFabrica();
     }//GEN-LAST:event_btnStopFabricaActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        supermercado.desconectarOficinaCentral();
+    }//GEN-LAST:event_formWindowClosing
 
     public void addCaja(PnlCaja caja){
         pnlCajas.add(caja);

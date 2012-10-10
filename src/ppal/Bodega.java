@@ -20,8 +20,11 @@ import java.util.Properties;
  */
 public class Bodega extends UnicastRemoteObject implements IntrBodega{
     
+    FrmBodega frmBodega;
+    
     private List<Producto> catalogoProductos = new ArrayList<Producto>();
     private List<ItemInventario> inventario = new ArrayList<ItemInventario>();
+    private String nombre;
     private String registryURL;
     private String host;
     private int RMIPortNum;
@@ -33,11 +36,13 @@ public class Bodega extends UnicastRemoteObject implements IntrBodega{
     private final int CANTIDADMAXIMAPRODUCTO=30;
     
     public static void main(String args[]) throws RemoteException{
-        Bodega bodega=new Bodega();
+        Bodega bodega=new Bodega("Bodega 1");
+
     }
     
-    public Bodega() throws RemoteException {
+    public Bodega(String nombre) throws RemoteException {
         super();
+        this.nombre=nombre;
         try{
             Properties props = new Properties();
             props.load(new FileInputStream(new File("src\\ppal\\configuracion.properties")));
@@ -54,6 +59,16 @@ public class Bodega extends UnicastRemoteObject implements IntrBodega{
             System.out.println("Esperando a que se cargue el catalogo de productos... productos " +catalogoProductos.size());
         }
         cargarInventario();
+        
+        frmBodega=new FrmBodega(this, inventario);
+        frmBodega.setLocationRelativeTo(null);
+        
+        frmBodega.setVisible(true); 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
         
     }
     
@@ -72,11 +87,19 @@ public class Bodega extends UnicastRemoteObject implements IntrBodega{
     
     public void despachar(Producto producto, int cantidad, IntrSupermercado supermercado) throws RemoteException {
         if (cantidad > 0) {
-            System.out.println("Despachando producto " + producto.getDescripcion() + " cantidad " + cantidad + "de la bodega " + this.hashCode() + " al supermercado " + supermercado.hashCode());
+            //System.out.println("Despachando producto " + producto.getDescripcion() + " cantidad " + cantidad + "de la bodega " + this.hashCode() + " al supermercado " + supermercado.hashCode());
+            frmBodega.setMensajeRecepcionEnvioPedidos("Despachando " +cantidad+" unds de "+ producto +  " al supermercado " + supermercado.getNombre() );
+            frmBodega.setMensajeInventario("Descargando " +cantidad+" unds de "+ producto);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
             ingresarDescargar(producto, cantidad * -1);
-            System.out.println("Saldo producto " + producto.getDescripcion() + ": " + saldo(producto) + " en la bodega : " + this.hashCode());
+            frmBodega.refrescarInventario();
+            //System.out.println("Saldo producto " + producto.getDescripcion() + ": " + saldo(producto) + " en la bodega : " + this.hashCode());
             supermercado.ingresarDescargar(producto, cantidad);
-            System.out.println("Saldo producto " + producto.getDescripcion() + ": " + supermercado.saldo(producto) + " en supermercado: " + supermercado.hashCode());
+            //System.out.println("Saldo producto " + producto.getDescripcion() + ": " + supermercado.saldo(producto) + " en supermercado: " + supermercado.hashCode());
         }
     }
     
@@ -120,6 +143,19 @@ public class Bodega extends UnicastRemoteObject implements IntrBodega{
            IntrOficinaCentral oficinaCentral=(IntrOficinaCentral)Naming.lookup(getRegistryURL());
            //registrando supermercado
            oficinaCentral.registrarBodega(this);
+           System.out.println("Bodega registrada!");
+        }// end try
+        catch (Exception re) {
+          System.out.println("Excepcion en Bodega: " + re);
+          re.printStackTrace();
+        }
+    }
+    
+    public void desconectarOficinaCentral() {
+        try{
+           IntrOficinaCentral oficinaCentral=(IntrOficinaCentral)Naming.lookup(getRegistryURL());
+           //registrando supermercado
+           oficinaCentral.desconectarBodega(this);
            System.out.println("Bodega registrada!");
         }// end try
         catch (Exception re) {
@@ -183,6 +219,20 @@ public class Bodega extends UnicastRemoteObject implements IntrBodega{
      */
     public void setRMIPortNum(int RMIPortNum) {
         this.RMIPortNum = RMIPortNum;
+    }
+
+    /**
+     * @return the nombre
+     */
+    public String getNombre() {
+        return nombre;
+    }
+
+    /**
+     * @param nombre the nombre to set
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
 }
