@@ -4,7 +4,7 @@ Maestria en Ingenieria de Sistemas
 Universidad Tecnológica de Pereira
 
 John Bayron Vásquez Castrillón
-Ruben Dario Marín
+Ruben Dario Marín Batero
 Andrés Sucerquia Osorio
 
 
