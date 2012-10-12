@@ -139,32 +139,28 @@ public class OficinaCentral extends UnicastRemoteObject implements IntrOficinaCe
             }
         //Busca en las bodegas si disponibilidad
         boolean despachado = false;
+        int pendiente=cantidad;
+        int cantidad_a_despachar;
         for (IntrBodega iterBodega : lstBodegas) {
             int saldo = iterBodega.saldo(producto);
-            if (saldo >= cantidad) {
-                iterBodega.despachar(producto, cantidad, supermercado);
-                despachado = true;
-                frmOficinaCentral.setMensajeRecepcionEnvioPedidos("Enviando pedido de " + cantidad + "unds de " + producto + " de la bodega "+iterBodega.getNombre() + " para el supermercado " + supermercado.getNombre() );
+            if (saldo > 0 ){//si hay existencias del producto
+                if( saldo-pendiente > 0){//si las existencias alcanzan para despachar completo el pedido
+                    cantidad_a_despachar=pendiente;
+                    pendiente=0;
+                }else{
+                    cantidad_a_despachar=saldo;
+                    pendiente=pendiente-cantidad_a_despachar;
+                }
+                iterBodega.despachar(producto, cantidad_a_despachar, supermercado);
+                if(pendiente==0){
+                    despachado = true;
+                }
+                frmOficinaCentral.setMensajeRecepcionEnvioPedidos("Enviando pedido de " + cantidad_a_despachar + "unds de " + producto + " de la bodega "+iterBodega.getNombre() + " para el supermercado " + supermercado.getNombre() );
                 //System.out.println("Pedido enviado de " + cantidad + "unds de " + producto + "la bodega "+iterBodega.getNombre() + " para el supermercado " + supermercado.getNombre() );
-                break;
             }
             //consulta la cantidad del producto en la bodega
             //System.out.println("Saldo del Producto: " + producto.getDescripcion() + " es:" + saldo + " en la Bodega " + iterBodega.hashCode());
         }
-        //Busca en los otros supermercados si hay disponibilidad
-        /*for (IntrSupermercado iterSupermercado : lstSupermercados) {
-            //consulta la cantidad del producto en la bodega
-            if (!iterSupermercado.equals(supermercado)) {
-                int saldo = iterSupermercado.saldo(producto);
-                System.out.println("Saldo del Producto: " + producto.getDescripcion() + " es:" + saldo + " en el Supermercado " + iterSupermercado.hashCode());
-                if (saldo >= cantidad) {
-                    (producto, cantidad, supermercado);
-                    despachado = true;
-                    System.out.println("Despachado Producto " + producto.getDescripcion() + " cantidad " + cantidad + " a supermercado " + supermercado.hashCode());
-                    break;
-                }
-            }
-        }*/
         if (!despachado) {
             frmOficinaCentral.setMensajeRecepcionEnvioPedidos("El producto " + producto.getDescripcion() + " esta agotado en toda la cadena de supermercados debe hacerse la solicitud de compra con el proveedor ");
             //System.out.println("El producto " + producto.getDescripcion() + " esta agotado en toda la cadena de supermercados debe hacerse la solicitud de compra con el proveedor ");
